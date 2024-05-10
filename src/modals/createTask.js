@@ -1,29 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const createTask = ({modal, toggle}) => {
+const CreateTaskPopup = ({ modal, toggle, save }) => {
+  const [taskName, setTaskName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleChange = (e) => {
+    
+    const {name, value} = e.target
+
+    if(name === "taskName"){
+      setTaskName(value)
+    }else{
+      setDescription(value)
+    }
+  }
+
+  const handleSave = () => {
+    let taskObj = {}
+    taskObj["Name"] = taskName
+    taskObj["Description"] = description
+    save(taskObj)
+  }
+
   return (
-    <Modal isOpen={modal} toggle={toggle} >
-      <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+    <Modal isOpen={modal} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Create Task</ModalHeader>
       <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+        <form>
+          <div className="form-group">
+            <label htmlFor="">Task Name</label>
+            <input 
+              type="text" 
+              className='form-control' 
+              value={taskName} 
+              onChange={handleChange}
+              name = "taskName"
+            />
+          </div>
+          <br />
+          <div className="form-group">
+            <label htmlFor="">Description</label>
+            <textarea 
+              rows="5" 
+              className='form-control' 
+              value={description} 
+              onChange={handleChange}
+              name = "description"
+            ></textarea>
+          </div>
+        </form>
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={toggle}>
-          Do Something
+        <Button color="primary" onClick={handleSave}>
+          Create
         </Button>{' '}
         <Button color="secondary" onClick={toggle}>
           Cancel
         </Button>
       </ModalFooter>
-  </Modal>
+    </Modal>
   );
 };
 
-export default createTask;
+export default CreateTaskPopup;
